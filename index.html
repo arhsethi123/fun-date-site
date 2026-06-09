@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Important Message For You 👀</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #ff6b9d;
+        min-height: 100vh;
+        overflow-x: hidden;
+        color: #fff;
+      }
+
+      .screen {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 24px;
+        text-align: center;
+        animation: fadeIn 0.5s ease;
+      }
+      .screen.active {
+        display: flex;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .emoji-big {
+        font-size: 72px;
+        margin-bottom: 16px;
+      }
+      h1 {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 12px;
+        line-height: 1.2;
+      }
+      h2 {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+      p {
+        font-size: 16px;
+        opacity: 0.92;
+        margin-bottom: 16px;
+        line-height: 1.5;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        padding: 28px 24px;
+        width: 100%;
+        max-width: 380px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 16px 36px;
+        border-radius: 50px;
+        border: none;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+      .btn:active {
+        transform: scale(0.96);
+      }
+
+      .btn-yes {
+        background: #fff;
+        color: #ff6b9d;
+        font-size: 22px;
+        padding: 18px 48px;
+      }
+      .btn-no {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        font-size: 15px;
+        position: fixed;
+        transition: none;
+      }
+      .btn-primary {
+        background: #fff;
+        color: #ff6b9d;
+        width: 100%;
+        margin-top: 8px;
+      }
+      .question-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 24px;
+      }
+
+      .no-attempts-msg {
+        font-size: 13px;
+        opacity: 0.8;
+        margin-top: -8px;
+        min-height: 20px;
+      }
+
+      /* Form styles */
+      .form-group {
+        text-align: left;
+        margin-bottom: 16px;
+        width: 100%;
+      }
+      label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        opacity: 0.9;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 13px 16px;
+        border-radius: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+        font-size: 15px;
+        outline: none;
+        transition: border 0.2s;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      input:focus,
+      select:focus {
+        border-color: rgba(255, 255, 255, 0.8);
+      }
+      select option {
+        background: #ff6b9d;
+        color: #fff;
+      }
+
+      .badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 50px;
+        padding: 6px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      /* Waiting list */
+      .queue-number {
+        font-size: 72px;
+        font-weight: 900;
+        line-height: 1;
+        margin: 8px 0;
+      }
+      .progress-bar-wrap {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50px;
+        height: 10px;
+        margin: 12px 0;
+        overflow: hidden;
+      }
+      .progress-bar {
+        height: 100%;
+        width: 2%;
+        background: #fff;
+        border-radius: 50px;
+        animation: progress 4s ease-out forwards;
+      }
+      @keyframes progress {
+        to {
+          width: 8%;
+        }
+      }
+
+      .insta-link {
+        color: #fff;
+        font-weight: 700;
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 14px 24px;
+        border-radius: 50px;
+        display: inline-block;
+        margin-top: 8px;
+        font-size: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+      }
+
+      .confetti-piece {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        animation: confettiFall linear forwards;
+        pointer-events: none;
+        z-index: 999;
+      }
+      @keyframes confettiFall {
+        0% {
+          transform: translateY(-20px) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(110vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
+      .heart-burst {
+        font-size: 48px;
+        animation: heartPop 0.6s ease forwards;
+      }
+      @keyframes heartPop {
+        0% {
+          transform: scale(0);
+        }
+        60% {
+          transform: scale(1.4);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .shake {
+        animation: shake 0.4s ease;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-8px);
+        }
+        75% {
+          transform: translateX(8px);
+        }
+      }
+
+      .subtle {
+        font-size: 13px;
+        opacity: 0.7;
+        margin-top: 4px;
+      }
+
+      /* Screen specific backgrounds */
+      #screen-question {
+        background: linear-gradient(135deg, #f093fb, #f5576c);
+      }
+      #screen-yay {
+        background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+        overflow: hidden;
+        position: relative;
+      }
+      .yay-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+      .yay-title {
+        font-size: 52px;
+        font-weight: 900;
+        letter-spacing: -1px;
+        line-height: 1;
+        animation: titlePop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+          forwards;
+      }
+      @keyframes titlePop {
+        0% {
+          transform: scale(0);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .floating-hearts {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .fh {
+        position: absolute;
+        font-size: 32px;
+        animation: floatUp linear infinite;
+        opacity: 0;
+      }
+      @keyframes floatUp {
+        0% {
+          transform: translateY(100vh) scale(0.5) rotate(-10deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-10vh) scale(1.1) rotate(10deg);
+          opacity: 0;
+        }
+      }
+      .pulse-ring {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.12);
+        animation: pulseRing 2s ease-out infinite;
+        z-index: 1;
+      }
+      .pulse-ring:nth-child(2) {
+        animation-delay: 0.6s;
+      }
+      .pulse-ring:nth-child(3) {
+        animation-delay: 1.2s;
+      }
+      @keyframes pulseRing {
+        0% {
+          transform: scale(0.5);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(2.5);
+          opacity: 0;
+        }
+      }
+      #screen-form {
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        overflow-y: auto;
+        justify-content: flex-start;
+        padding-top: 40px;
+      }
+      #screen-form .card {
+        color: #fff;
+      }
+      #screen-waiting {
+        background: linear-gradient(135deg, #43e97b, #38f9d7);
+        color: #1a5c3a;
+      }
+      #screen-waiting h1,
+      #screen-waiting h2,
+      #screen-waiting p,
+      #screen-waiting .badge {
+        color: #1a5c3a;
+      }
+      #screen-waiting .insta-link {
+        color: #1a5c3a;
+        border-color: rgba(0, 0, 0, 0.2);
+        background: rgba(255, 255, 255, 0.4);
+      }
+      #screen-waiting .progress-bar {
+        background: #1a5c3a;
+      }
+      #screen-waiting .progress-bar-wrap {
+        background: rgba(0, 0, 0, 0.15);
+      }
+      #screen-waiting .queue-number {
+        color: #1a5c3a;
+      }
+
+      .error-msg {
+        font-size: 13px;
+        color: #ffe0e0;
+        margin-top: 4px;
+        display: none;
+      }
+      .error-msg.show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SCREEN 1: The Question -->
+    <div class="screen active" id="screen-question">
+      <div class="question-area">
+        <img
+          src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdW52eWo2eHMxNnZrbDAzZjBueWQ1MTY3N2pnYTZ2ZWQzemoydXQ4NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wvYNSqBAMDVx8CEYkt/giphy.gif"
+          style="width: 180px; border-radius: 16px; margin-bottom: 4px"
+        />
+        <div class="card">
+          <h1>Will you go on a date with me?</h1>
+          <p id="question-subtext">
+            Side effects may include a mild obsession.
+          </p>
+          <div class="no-attempts-msg" id="no-msg"></div>
+        </div>
+        <button class="btn btn-yes" onclick="onYes()">
+          💖 Yes, obviously!
+        </button>
+        <p class="subtle">
+          (There's also a No button somewhere on this page...)
+        </p>
+      </div>
+      <button class="btn btn-no" id="btn-no" onclick="onNoAttempt()">
+        Nope 🙅
+      </button>
+    </div>
+
+    <!-- SCREEN 2.5: Yay Celebration -->
+    <div class="screen" id="screen-yay">
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring"></div>
+      <div class="floating-hearts" id="floating-hearts"></div>
+      <div class="yay-content">
+        <img
+          src="https://i0.wp.com/justmaths.co.uk/wp-content/uploads/2016/10/celebration-gif.gif?ssl=1"
+          style="width: 200px; border-radius: 20px"
+        />
+        <div class="yay-title">YESSS!! 🎉</div>
+        <p style="font-size: 18px; font-weight: 600">
+          I knew you'd make the right call 😎
+        </p>
+        <button
+          class="btn btn-yes"
+          onclick="showScreen('screen-form')"
+          style="margin-top: 8px"
+        >
+          Let's plan it 💌
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: Details Form -->
+    <div class="screen" id="screen-form">
+      <div class="card">
+        <h2>Let's plan it! 🎉</h2>
+        <p style="font-size: 14px; margin-bottom: 20px">
+          Fill in the details and I'll make it worth your while 😎
+        </p>
+
+        <div class="form-group">
+          <label>Your name ✨</label>
+          <input type="text" id="f-name" placeholder="What do I call you?" />
+        </div>
+
+        <div class="form-group">
+          <label>Pick a vibe 🌆</label>
+          <select id="f-location">
+            <option value="">Where should we go?</option>
+            <option>☕ Cozy café (classic)</option>
+            <option>🍕 Pizza date (true love)</option>
+            <option>🎬 Movie (no awkward silences)</option>
+            <option>🎳 Bowling (competitive flirting)</option>
+            <option>🍦 Ice cream stroll (objectively perfect)</option>
+            <option>🌮 Tacos (chaotic good)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Pick a date 📅</label>
+          <input type="date" id="f-date" />
+        </div>
+
+        <script>
+          const d = new Date();
+          d.setDate(d.getDate() + 1);
+          document.getElementById("f-date").min = d.toISOString().split("T")[0];
+        </script>
+
+        <div class="form-group">
+          <label>Pick a time ⏰</label>
+          <select id="f-time">
+            <option value="">What time works?</option>
+            <option>🌅 Morning (10am - I'll reach by 11)</option>
+            <option>☀️ Afternoon (02pm - lunch date energy)</option>
+            <option>🌇 Evening (5pm - golden hour vibes)</option>
+            <option>🌙 Night (8pm - mysterious)</option>
+            <option>🦉 Late night (11PM - living dangerously)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label
+            >How do I reach you? *
+            <span style="opacity: 0.7"
+              >(at least one is mandatory 😅)</span
+            ></label
+          >
+          <div class="form-group" style="margin-bottom: 10px">
+            <label
+              style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 14px;
+              "
+              >📱 WhatsApp</label
+            >
+            <input
+              type="text"
+              id="f-whatsapp"
+              placeholder="Your WhatsApp number"
+              inputmode="numeric"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            />
+          </div>
+          <div class="form-group" style="margin-bottom: 0">
+            <label
+              style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 14px;
+              "
+              >📸 Instagram</label
+            >
+            <input
+              type="text"
+              id="f-instagram"
+              placeholder="Your Instagram @handle"
+            />
+          </div>
+          <div class="error-msg" id="contact-error">
+            At least one is mandatory! How else will I text you at 2am? 😭
+          </div>
+          <div class="error-msg" id="whatsapp-error">
+            WhatsApp number should only contain digits 📱
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="submitForm()">
+          Submit my application 🚀
+        </button>
+        <p class="subtle" style="margin-top: 12px">
+          * All submissions are legally binding 😂
+        </p>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: Waiting List -->
+    <div class="screen" id="screen-waiting">
+      <div class="card" style="color: #1a5c3a">
+        <img
+          src="https://media.tenor.com/UT3gmbNXdiEAAAAM/yeah-weirdo.gif"
+          style="width: 160px; border-radius: 16px; margin-bottom: 8px"
+        />
+        <h1>You're on the list!</h1>
+        <div class="badge">Official Waiting List Number</div>
+        <div class="queue-number" id="queue-num">#4,271</div>
+        <p>
+          You are currently
+          <strong>#<span id="queue-display">4,271</span></strong> in line.<br />
+          Estimated wait time is <strong>15 business dates</strong> 📅
+        </p>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar"></div>
+        </div>
+        <p style="font-size: 13px; opacity: 0.8">
+          Your spot is being warmed up... 🔥
+        </p>
+        <hr
+          style="
+            border: none;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            margin: 16px 0;
+          "
+        />
+        <p style="font-weight: 700">Want to skip the queue? 👀</p>
+        <p style="font-size: 14px">DM me on Telegram to move up the list.</p>
+        <a
+          class="insta-link"
+          href="https://t.me/InternetUser3257"
+          target="_blank"
+        >
+          ✈️ DM me on Telegram
+        </a>
+        <p class="subtle" style="margin-top: 16px; color: #1a5c3a">
+          P.S. You were brave for saying yes 💚
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // ---- Screen management ----
+      function showScreen(id) {
+        document
+          .querySelectorAll(".screen")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+
+        if (id === "screen-waiting") setQueueNumber();
+      }
+
+      // ---- No button escapism ----
+      let noAttempts = 0;
+      const noMsgs = [
+        "Nice try 😏",
+        "Too slow!",
+        "Did you really think that'd work? 😂",
+        "Lol nope 🏃",
+        "The No button has trust issues",
+        "Almost... not really",
+        "You're persistent, I like that 😏",
+        "NO is not in my vocabulary sorry",
+        "The button said no to your no 🙃",
+        "Give up babe, just say yes 💖",
+      ];
+
+      function moveNoButton() {
+        const btn = document.getElementById("btn-no");
+        const margin = 60;
+        const maxX = window.innerWidth - btn.offsetWidth - margin;
+        const maxY = window.innerHeight - btn.offsetHeight - margin;
+        const x = Math.random() * maxX + margin / 2;
+        const y = Math.random() * maxY + margin / 2;
+        btn.style.left = x + "px";
+        btn.style.top = y + "px";
+      }
+
+      function onNoAttempt() {
+        noAttempts++;
+        const msg = document.getElementById("no-msg");
+        msg.textContent = noMsgs[Math.min(noAttempts - 1, noMsgs.length - 1)];
+        // shrink the button progressively
+        const size = Math.max(10, 15 - noAttempts);
+        document.getElementById("btn-no").style.fontSize = size + "px";
+        moveNoButton();
+      }
+
+      // Move No button on hover/touchstart — the real escape
+      document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.getElementById("btn-no");
+        moveNoButton();
+        btn.addEventListener("mouseover", moveNoButton);
+        btn.addEventListener(
+          "touchstart",
+          (e) => {
+            e.preventDefault();
+            moveNoButton();
+          },
+          { passive: false },
+        );
+      });
+
+      // ---- Yes ----
+      function onYes() {
+        showScreen("screen-yay");
+        triggerConfetti();
+        spawnFloatingHearts();
+      }
+
+      function spawnFloatingHearts() {
+        const container = document.getElementById("floating-hearts");
+        container.innerHTML = "";
+        const emojis = ["❤️", "💖", "💗", "💓", "💝", "🧡", "💛", "💚"];
+        for (let i = 0; i < 20; i++) {
+          const el = document.createElement("div");
+          el.className = "fh";
+          el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          el.style.left = Math.random() * 100 + "vw";
+          el.style.animationDuration = 4 + Math.random() * 4 + "s";
+          el.style.animationDelay = Math.random() * 4 + "s";
+          el.style.fontSize = 20 + Math.random() * 24 + "px";
+          container.appendChild(el);
+        }
+      }
+
+      // ---- Form submit ----
+      const WORKER_URL = "https://cool-cake-16aa.hsethi1496.workers.dev";
+
+      async function submitForm() {
+        const wa = document.getElementById("f-whatsapp").value.trim();
+        const ig = document.getElementById("f-instagram").value.trim();
+        const err = document.getElementById("contact-error");
+        const waErr = document.getElementById("whatsapp-error");
+        if (!wa && !ig) {
+          err.classList.add("show");
+          return;
+        }
+        err.classList.remove("show");
+        if (wa && !/^[0-9]+$/.test(wa)) {
+          waErr.classList.add("show");
+          return;
+        }
+        waErr.classList.remove("show");
+        showScreen("screen-waiting");
+        fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: document.getElementById("f-name").value.trim(),
+            location: document.getElementById("f-location").value,
+            date: document.getElementById("f-date").value,
+            time: document.getElementById("f-time").value,
+            whatsapp: wa,
+            instagram: ig,
+          }),
+        }).catch(() => {}); // silent fail — user already sees success screen
+      }
+
+      // ---- Waiting list queue number ----
+      function setQueueNumber() {
+        const num = Math.floor(Math.random() * 41) + 20;
+        const formatted = num.toLocaleString();
+        document.getElementById("queue-num").textContent = "#" + formatted;
+        document.getElementById("queue-display").textContent = formatted;
+      }
+
+      // ---- Confetti ----
+      function triggerConfetti() {
+        const colors = [
+          "#ff6b9d",
+          "#ffd93d",
+          "#6bcb77",
+          "#4d96ff",
+          "#ff6b6b",
+          "#fff",
+        ];
+        for (let i = 0; i < 60; i++) {
+          setTimeout(() => {
+            const el = document.createElement("div");
+            el.className = "confetti-piece";
+            el.style.cssText = `
+          left: ${Math.random() * 100}vw;
+          top: -20px;
+          background: ${colors[Math.floor(Math.random() * colors.length)]};
+          width: ${6 + Math.random() * 8}px;
+          height: ${6 + Math.random() * 8}px;
+          animation-duration: ${1.5 + Math.random() * 2}s;
+          animation-delay: ${Math.random() * 0.5}s;
+        `;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 3500);
+          }, i * 30);
+        }
+      }
+    </script>
+  </body>
+</html>
