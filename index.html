@@ -615,6 +615,15 @@
     </div>
 
     <script>
+      // ---- Name from URL ----
+      const urlName = new URLSearchParams(window.location.search).get("name");
+      if (urlName) {
+        const pretty = urlName.charAt(0).toUpperCase() + urlName.slice(1);
+        document.querySelector("#screen-question h1").textContent =
+          "Hey " + pretty + ", will you go on a date with me? 👀";
+        document.getElementById("f-name").value = pretty;
+      }
+
       // ---- Screen management ----
       function showScreen(id) {
         document
